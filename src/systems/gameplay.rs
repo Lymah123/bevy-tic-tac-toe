@@ -1,0 +1,157 @@
+use bevy::prelude::*;
+
+use crate::config::{CELL_SIZE, X_COLOR, O_COLOR, MARKER_SIZE_RATIO};
+use crate::components::{BoardPosition, CellMark, GameOverMessage};
+use crate::resources::BoardState;
+use crate::events::{PlayerMoveEvent, GameOverEvent};
+use crate::types::{CellState, Player, GameResult};
+
+pub fn apply_player_move(
+  mut commands: Commands,
+  mut board_state: ResMut<BoardState>,
+  mut player_move_events: EventReader<PlayerMoveEvent>,
+  asset_server: Res<AssetServer>,
+  q_board_cells: Query<(&BoardPosition, &Transform)>,
+) {
+  for event in player_move_events.read() {
+    info!("📥 Received PlayerMoveEvent: row={}, col={}, player={:?}",
+          event.row, event.col, event.player);
+
+    let row = event.row;
+    let col = event.col;
+    let player = event.player;
+
+    // Check if game is over or cell is occupied
+    if board_state.game_over {
+      info!("❌ Game is over, ignoring move");
+      continue;
+    }
+
+    if matches!(board_state.board[row][col], CellState::Occupied(_)) {
+      info!("❌ Cell ({}, {}) is already occupied", row, col);
+      continue;
+    }
+
+    info!("✅ Move is valid, applying...");
+
+    // Find the correct cell's transform
+    let mut mark_transform = Transform::default();
+    let mut found_cell = false;
+
+    for (pos, transform) in q_board_cells.iter() {
+      if pos.row == row && pos.col == col {
+        mark_transform = *transform;
+        mark_transform.translation.z = 1.0;
+        found_cell = true;
+        info!("📍 Found cell transform at position: {:?}", mark_transform.translation);
+        break;
+      }
+    }
+
+    if !found_cell {
+      error!("❌ Could not find cell at ({}, {})", row, col);
+      continue;
+    }
+
+    // Update board state
+    board_state.board[row][col] = CellState::Occupied(player);
+    info!("🎯 Updated board state at ({}, {}) with {:?}", row, col, player);
+
+    // Calculate marker properties
+    let mark_font_size = CELL_SIZE * MARKER_SIZE_RATIO;
+    let mark_color = match player {
+      Player::X => X_COLOR,
+      Player::O => O_COLOR,
+    };
+
+    info!("🎨 Creating mark: '{}', size: {}, color: {:?}",
+          player.to_char(), mark_font_size, mark_color);
+
+    // Spawn the marker
+    let entity = commands.spawn((
+      Text2dBundle {
+        text: Text::from_section(
+          player.to_char().to_string(),
+          TextStyle {
+            font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+            font_size: mark_font_size,
+            color: mark_color,
+          },
+        ),
+        transform: mark_transform,
+        ..default()
+      },
+      CellMark(player),
+      BoardPosition { row, col },
+    ));
+
+    info!("✨ Spawned mark entity: {:?}", entity.id());
+  }
+}
+
+pub fn handle_restart_button(
+  keys: Res<ButtonInput<KeyCode>>,
+  mut board_state: ResMut<BoardState>,
+  mut commands: Commands,
+  game_over_messages: Query<Entity, With<GameOverMessage>>,
+  cell_marks: Query<Entity, With<CellMark>>,
+) {
+  if keys.just_pressed(KeyCode::KeyR) {
+    info!("🔄 R key pressed in gameplay.rs - attempting restart...");
+
+    // Reset board state
+    board_state.board = [[CellState::Empty; 3]; 3];
+    board_state.current_player = Player::X;
+    board_state.game_over = false;
+
+    info!("🎮 Board state reset - Current player: {:?}, Game over: {}",
+          board_state.current_player, board_state.game_over);
+
+    // Remove all game over messages
+    let message_count = game_over_messages.iter().count();
+    for entity in game_over_messages.iter() {
+      commands.entity(entity).despawn();
+    }
+    info!("🗑️ Removed {} game over messages", message_count);
+
+    // Remove all X and O marks from the board
+    let mark_count = cell_marks.iter().count();
+    for entity in cell_marks.iter() {
+      commands.entity(entity).despawn();
+    }
+    info!("🗑️ Removed {} cell marks", mark_count);
+
+    info!("✅ Game restarted in gameplay.rs! Current player is now: {:?}", board_state.current_player);
+  }
+}
+
+pub fn check_game_state(
+  mut board_state: ResMut<BoardState>,
+  mut game_over_events: EventWriter<GameOverEvent>,
+) {
+  if board_state.game_over {
+    return;
+  }
+
+  let result = crate::ai_logic::get_game_result(&board_state.board);
+
+  match result {
+    GameResult::Win(winner) => {
+      info!("🏆 Game won by {:?}", winner);
+      board_state.game_over = true;
+      board_state.winner = Some(winner);
+      game_over_events.send(GameOverEvent::Win(winner));
+    }
+    GameResult::Draw => {
+      info!("🤝 Game ended in a draw");
+      board_state.game_over = true;
+      board_state.winner = None;
+      game_over_events.send(GameOverEvent::Draw);
+    }
+    GameResult::InProgress => {
+      // Switch player turn
+      board_state.current_player = board_state.current_player.opposite();
+      info!("🔄 Turn switched to {:?}", board_state.current_player);
+    }
+  }
+}
