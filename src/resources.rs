@@ -1,4 +1,7 @@
 use bevy::prelude::*;
+
+use bevy::time::TimerMode;
+
 use crate::types::{Player, CellState, GameMode, Difficulty};
 
 #[derive(Resource)]
@@ -14,6 +17,20 @@ pub struct CurrentGameMode(pub GameMode);
 
 #[derive(Resource)]
 pub struct CurrentAIDifficulty(pub Difficulty);
+
+
+#[derive(Resource)]
+pub struct AIDelay {
+  pub timer: Timer,
+}
+
+impl Default for AIDelay {
+  fn default() -> Self {
+    Self {
+      timer: Timer::from_seconds(1.0, TimerMode::Once),
+    }
+  }
+}
 
 // Default Implementation
 impl Default for BoardState {

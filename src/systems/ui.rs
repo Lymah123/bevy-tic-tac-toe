@@ -1,6 +1,13 @@
 use bevy::prelude::*;
 
+
+use crate::config::{
+  FONT_SIZE_TITLE, BACKGROUND_COLOR, LINE_COLOR, X_COLOR, O_COLOR,
+  BUTTON_WIDTH, BUTTON_HEIGHT, FONT_SIZE_BUTTON
+};
+
 use crate::config::{FONT_SIZE_TITLE, BACKGROUND_COLOR, LINE_COLOR, X_COLOR, O_COLOR};
+
 use crate::events::GameOverEvent;
 use crate::resources::{BoardState, GameStats};
 use crate::types::{Player, GameResult, CellState};
@@ -65,8 +72,13 @@ pub fn display_game_over_ui(
     commands.spawn((
       ButtonBundle {
         style: Style {
+
+          width: Val::Px(BUTTON_WIDTH),
+          height: Val::Px(BUTTON_HEIGHT),
+
           width: Val::Px(150.0),
           height: Val::Px(50.0),
+
           position_type: PositionType::Absolute,
           top: Val::Px(120.0),
           left: Val::Px(50.0),
@@ -83,7 +95,11 @@ pub fn display_game_over_ui(
         "Press R to Restart!",
         TextStyle {
           font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+
+          font_size: FONT_SIZE_BUTTON,
+
           font_size: 16.0,
+
           color: Color::WHITE,
         },
       ));
@@ -101,6 +117,14 @@ pub fn handle_restart_button(
 ) {
   // Test if ANY key is being detected
   for key in keys.get_just_pressed() {
+
+    info!("Key detected: {:?}", key);
+  }
+
+  if keys.just_pressed(KeyCode::KeyR) {
+    println!(" R KEY PRESSED IN UI.RS - RESTART DETECTED!");
+    info!(" R key pressed - attempting restart...");
+
     println!("🎮 Key detected: {:?}", key);
   }
 
@@ -108,13 +132,16 @@ pub fn handle_restart_button(
     println!("🔄 R KEY PRESSED IN UI.RS - RESTART DETECTED!");
     info!("🔄 R key pressed - attempting restart...");
 
+
     // Reset board state
     board_state.board = [[CellState::Empty; 3]; 3];
     board_state.current_player = Player::X;
     board_state.game_over = false;
 
-    println!("🎮 BOARD STATE RESET - Game Over: {}", board_state.game_over);
-    info!("🎮 Board state reset - Current player: {:?}, Game over: {}",
+    println!(" BOARD STATE RESET - Game Over: {}", board_state.game_over);
+    info!(" Board state reset - Current player: {:?}, Game over: {}",
+
+
           board_state.current_player, board_state.game_over);
 
     // Remove all game over messages
@@ -122,23 +149,33 @@ pub fn handle_restart_button(
     for entity in game_over_messages.iter() {
       commands.entity(entity).despawn();
     }
+
     info!("🗑️ Removed {} game over messages", message_count);
+
 
     // Remove all X and O marks from the board
     let mark_count = cell_marks.iter().count();
     for entity in cell_marks.iter() {
       commands.entity(entity).despawn();
     }
-    info!("🗑️ Removed {} cell marks", mark_count);
+
+    info!(" Removed {} cell marks", mark_count);
 
     // Remove restart buttons
     let button_count = restart_buttons.iter().count();
     for entity in restart_buttons.iter() {
       commands.entity(entity).despawn();
     }
+
+    info!(" Removed {} restart buttons", button_count);
+
+    println!("RESTART COMPLETE!");
+    info!("Game restarted! Current player is now: {:?}", board_state.current_player);
+
     info!("🗑️ Removed {} restart buttons", button_count);
 
     println!("✅ RESTART COMPLETE!");
     info!("✅ Game restarted! Current player is now: {:?}", board_state.current_player);
+
   }
 }
