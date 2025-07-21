@@ -133,7 +133,9 @@ fn minimax(
   }
 }
 
+
 pub fn get_best_move(board: &[[CellState; 3]; 3], player: Player, depth: i32) -> Option<BoardMove> {
+
   let mut board_copy = *board;
   let mut best_move = None;
   let mut best_value = i32::MIN;

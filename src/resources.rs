@@ -1,5 +1,7 @@
 use bevy::prelude::*;
+
 use bevy::time::TimerMode;
+
 use crate::types::{Player, CellState, GameMode, Difficulty};
 
 #[derive(Resource)]
@@ -15,6 +17,7 @@ pub struct CurrentGameMode(pub GameMode);
 
 #[derive(Resource)]
 pub struct CurrentAIDifficulty(pub Difficulty);
+
 
 #[derive(Resource)]
 pub struct AIDelay {
