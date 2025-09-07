@@ -18,11 +18,21 @@ use systems::input::handle_mouse_clicks;
 use systems::setup::setup_game;
 use systems::ui::{display_game_over_ui, handle_restart_button};
 
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::*;
+
 fn main() {
+    #[cfg(target_arch = "wasm32")]
+    {
+        std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+        console_log::init_with_level(log::Level::Info).expect("error initializing log");
+    }
+
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "Tic-Tac-Toe".into(),
+                canvas: Some("#bevy".to_owned()),
                 resolution: (config::WINDOW_WIDTH, config::WINDOW_HEIGHT).into(),
                 resizable: false,
                 ..default()

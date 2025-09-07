@@ -4,7 +4,7 @@ use crate::components::{BoardPosition, CellMark};
 use crate::config::{CELL_SIZE, MARKER_SIZE_RATIO, O_COLOR, X_COLOR};
 use crate::events::{GameOverEvent, PlayerMoveEvent};
 use crate::resources::BoardState;
-use crate::types::{CellState, GameResult, Player};
+use crate::types::{CellState, Player};
 
 pub fn apply_player_move(
     mut commands: Commands,
@@ -39,13 +39,10 @@ pub fn apply_player_move(
 
         // Find the correct cell entity
         let mut found_cell_entity = None;
-        let mut mark_transform = Transform::default();
 
         for (entity, pos, transform) in q_board_cells.iter() {
             if pos.row == row && pos.col == col {
                 found_cell_entity = Some(entity);
-                mark_transform = *transform;
-                mark_transform.translation.z = 1.0; // Place marker above cell
                 break;
             }
         }
@@ -55,7 +52,6 @@ pub fn apply_player_move(
             continue;
         };
 
-        // Update board state
         board_state.board[row][col] = CellState::Occupied(player);
 
         // Calculate marker properties
@@ -65,8 +61,7 @@ pub fn apply_player_move(
             Player::O => O_COLOR,
         };
 
-        // Create marker transform - RELATIVE to parent (cell)
-        let marker_transform = Transform::from_xyz(0.0, 0.0, 1.0); // Center of cell, above it
+        let marker_transform = Transform::from_xyz(0.0, 0.0, 1.0);
 
         // Spawn the marker as a CHILD of the cell (no BoardPosition!)
         let marker_entity = commands.spawn((
@@ -83,18 +78,29 @@ pub fn apply_player_move(
                 ..default()
             },
             CellMark(player),
-            // NOTE: NO BoardPosition component here!
         )).id();
 
         // Make the marker a child of the cell
         commands.entity(cell_entity).add_child(marker_entity);
 
-        // ✅ Clean log message
         info!("✅ {} placed at ({}, {})", player.to_char(), row, col);
 
         // 🔑 CRITICAL: Switch turns ONLY after a successful move
         board_state.current_player = board_state.current_player.opposite();
         info!("🔄 Turn: {}", board_state.current_player.to_char());
+
+        println!("Current board state:");
+        for row in 0..3 {
+          for col in 0..3 {
+            match board_state.board[row][col] {
+              CellState::Empty => print!(" . "),
+              CellState::Occupied(Player::X) => print!(" X "),
+              CellState::Occupied(Player::O) => print!(" O "),
+            }
+          }
+          println!();
+        }
+        println!("Current player should be: {:?}", board_state.current_player);
     }
 }
 
@@ -109,20 +115,21 @@ pub fn check_game_state(
     let result = crate::ai_logic::get_game_result(&board_state.board);
 
     match result {
-        GameResult::Win(winner) => {
+        Some(winner) => {
             info!("🏆 {} WINS!", winner.to_char());
             board_state.game_over = true;
             board_state.winner = Some(winner);
             game_over_events.send(GameOverEvent::Win(winner));
         }
-        GameResult::Draw => {
-            info!("🤝 DRAW!");
-            board_state.game_over = true;
-            board_state.winner = None;
-            game_over_events.send(GameOverEvent::Draw);
-        }
-        GameResult::InProgress => {
-            // Game continues
+        None => {
+            // Check if board is full (draw)
+            if crate::ai_logic::is_board_full(&board_state.board) {
+                info!("🤝 DRAW!");
+                board_state.game_over = true;
+                board_state.winner = None;
+                game_over_events.send(GameOverEvent::Draw);
+            }
+            // If no winner and board not full, game continues
         }
     }
 }

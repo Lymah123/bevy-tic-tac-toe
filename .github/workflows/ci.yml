@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, features ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev libudev-dev pkg-config
+
+    - name: Cache dependencies
+      uses: Swatinem/rust-cache@v2
+
+    - name: Run tests
+      run: cargo test --verbose
+
+    - name: Run doctests
+      run: cargo test --doc
+
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt
+    - name: Enforce formatting
+      run: cargo fmt --check
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev libudev-dev pkg-config
+    - uses: Swatinem/rust-cache@v2
+    - name: Linting
+      run: cargo clippy -- -D warnings
+
+  build:
+    name: Build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+    - name: Install Linux dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev libudev-dev pkg-config
+    - uses: Swatinem/rust-cache@v2
+    - name: Build
+      run: cargo build --verbose --release
+
+  security_audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+    - uses: Swatinem/rust-cache@v2
+    - name: Install cargo-audit
+      run: cargo install cargo-audit
+    - name: Run security audit
+      run: cargo audit
+
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev libudev-dev pkg-config
+    - uses: Swatinem/rust-cache@v2
+    - name: Install cargo-tarpaulin
+      run: cargo install cargo-tarpaulin
+    - name: Generate code coverage
+      run: cargo tarpaulin --verbose --all-features --workspace --timeout 120 --out xml
+    - name: Upload to codecov.io
+      uses: codecov/codecov-action@v3
+      with:
+        fail_ci_if_error: true
+  msrv:
+    name: Minimum Supported Rust Version
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@1.70.0
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev libudev-dev pkg-config
+    - uses: Swatinem/rust-cache@v2
+    - name: Check compilation with MSRV
+      run: cargo check --verbose

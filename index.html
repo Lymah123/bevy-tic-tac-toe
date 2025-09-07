@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>🎮 Bevy Tic-Tac-Toe - AI Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            margin: 10px 0;
+            opacity: 0.8;
+            font-size: 1.1em;
+        }
+
+        .game-container {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        canvas {
+            display: block;
+            border-radius: 10px;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .loading h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #4ecdc4;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 2em; }
+            canvas { max-width: 100%; height: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎮 Bevy Tic-Tac-Toe</h1>
+        <p>Challenge the AI • Built with Rust & Bevy</p>
+        <div>
+            <span class="tech-badge">🦀 Rust</span>
+            <span class="tech-badge">🎯 Bevy ECS</span>
+            <span class="tech-badge">🧠 Minimax AI</span>
+            <span class="tech-badge">🌐 WebAssembly</span>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <div id="loading" class="loading">
+            <h2>🚀 Loading Game...</h2>
+            <div class="spinner"></div>
+            <p>Initializing AI opponent...</p>
+        </div>
+        <canvas id="bevy"></canvas>
+    </div>
+
+    <div class="controls">
+        <p>🖱️ Click any cell to make your move • You are <strong>X</strong>, AI is <strong>O</strong></p>
+        <p>💡 The AI uses Minimax algorithm with alpha-beta pruning - good luck!</p>
+    </div>
+
+    <script>
+        // Hide loading screen when game starts
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loading = document.getElementById('loading');
+                if (loading) {
+                    loading.style.opacity = '0';
+                    setTimeout(() => loading.style.display = 'none', 500);
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
