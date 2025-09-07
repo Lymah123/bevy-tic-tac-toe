@@ -40,7 +40,7 @@ pub fn apply_player_move(
         // Find the correct cell entity
         let mut found_cell_entity = None;
 
-        for (entity, pos, transform) in q_board_cells.iter() {
+        for (entity, pos, _transform) in q_board_cells.iter() {
             if pos.row == row && pos.col == col {
                 found_cell_entity = Some(entity);
                 break;

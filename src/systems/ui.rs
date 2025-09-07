@@ -103,7 +103,7 @@ pub fn display_game_over_ui(
 }
 
 pub fn handle_restart_button(
-    keys: Res<ButtonInput<KeyCode>>,
+    keys: Res<Input<KeyCode>>,
     mut board_state: ResMut<BoardState>,
     mut commands: Commands,
     game_over_messages: Query<Entity, With<GameOverMessage>>,
@@ -115,7 +115,7 @@ pub fn handle_restart_button(
         info!("Key detected: {:?}", key);
     }
 
-    if keys.just_pressed(KeyCode::KeyR) {
+    if keys.just_pressed(KeyCode::R) {
         println!(" R KEY PRESSED IN UI.RS - RESTART DETECTED!");
         info!(" R key pressed - attempting restart...");
 
