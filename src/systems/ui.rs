@@ -2,8 +2,7 @@ use bevy::prelude::*;
 
 use crate::components::{CellMark, GameOverMessage, RestartButton};
 use crate::config::{
-   BUTTON_HEIGHT, BUTTON_WIDTH, FONT_SIZE_BUTTON, FONT_SIZE_TITLE, LINE_COLOR,
-    O_COLOR, X_COLOR,
+    BUTTON_HEIGHT, BUTTON_WIDTH, FONT_SIZE_BUTTON, FONT_SIZE_TITLE, LINE_COLOR, O_COLOR, X_COLOR,
 };
 use crate::events::GameOverEvent;
 use crate::resources::{BoardState, GameStats};

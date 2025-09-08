@@ -64,21 +64,23 @@ pub fn apply_player_move(
         let marker_transform = Transform::from_xyz(0.0, 0.0, 1.0);
 
         // Spawn the marker as a CHILD of the cell (no BoardPosition!)
-        let marker_entity = commands.spawn((
-            Text2dBundle {
-                text: Text::from_section(
-                    player.to_char().to_string(),
-                    TextStyle {
-                        font: asset_server.load("fonts/FiraSans-Bold.ttf"),
-                        font_size: mark_font_size,
-                        color: mark_color,
-                    },
-                ),
-                transform: marker_transform,
-                ..default()
-            },
-            CellMark(player),
-        )).id();
+        let marker_entity = commands
+            .spawn((
+                Text2dBundle {
+                    text: Text::from_section(
+                        player.to_char().to_string(),
+                        TextStyle {
+                            font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+                            font_size: mark_font_size,
+                            color: mark_color,
+                        },
+                    ),
+                    transform: marker_transform,
+                    ..default()
+                },
+                CellMark(player),
+            ))
+            .id();
 
         // Make the marker a child of the cell
         commands.entity(cell_entity).add_child(marker_entity);
@@ -91,14 +93,14 @@ pub fn apply_player_move(
 
         println!("Current board state:");
         for row in 0..3 {
-          for col in 0..3 {
-            match board_state.board[row][col] {
-              CellState::Empty => print!(" . "),
-              CellState::Occupied(Player::X) => print!(" X "),
-              CellState::Occupied(Player::O) => print!(" O "),
+            for col in 0..3 {
+                match board_state.board[row][col] {
+                    CellState::Empty => print!(" . "),
+                    CellState::Occupied(Player::X) => print!(" X "),
+                    CellState::Occupied(Player::O) => print!(" O "),
+                }
             }
-          }
-          println!();
+            println!();
         }
         println!("Current player should be: {:?}", board_state.current_player);
     }

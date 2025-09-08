@@ -1,6 +1,4 @@
-use crate::types::{CellState, Player};
-
-pub type Board = [[CellState; 3]; 3];
+use crate::types::{CellState, Player, Board};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BoardMove {
@@ -63,7 +61,13 @@ pub fn is_board_full(board: &Board) -> bool {
     true
 }
 
-fn minimax(board: &Board, depth: i32, mut alpha: i32, mut beta: i32, maximizing_player: bool) -> i32 {
+fn minimax(
+    board: &Board,
+    depth: i32,
+    mut alpha: i32,
+    mut beta: i32,
+    maximizing_player: bool,
+) -> i32 {
     // Check for terminal states
     if let Some(winner) = check_winner(board) {
         return match winner {
@@ -141,13 +145,19 @@ pub fn get_best_move(board: &Board, player: Player) -> Option<(usize, usize)> {
                 if score > best_score {
                     best_score = score;
                     best_move = Some((row, col));
-                    println!("   ✅ New best move: ({}, {}) with score {}", row, col, score);
+                    println!(
+                        "   ✅ New best move: ({}, {}) with score {}",
+                        row, col, score
+                    );
                 }
             }
         }
     }
 
-    println!("🎯 Final decision: {:?} with score {}", best_move, best_score);
+    println!(
+        "🎯 Final decision: {:?} with score {}",
+        best_move, best_score
+    );
     best_move
 }
 
@@ -163,7 +173,7 @@ pub fn find_empty_cells(board: &Board) -> Vec<BoardMove> {
     empty_cells
 }
 pub fn get_game_result(board: &Board) -> Option<Player> {
-  check_winner(board)
+    check_winner(board)
 }
 
 impl BoardMove {

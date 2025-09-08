@@ -34,6 +34,8 @@ pub enum CellState {
     Occupied(Player),
 }
 
+pub type Board = [[CellState; 3]; 3];
+
 // Represent the possible outcomes of the game
 #[derive(Debug, PartialEq, Clone, Copy, Eq)]
 pub enum GameResult {

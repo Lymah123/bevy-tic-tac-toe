@@ -1,8 +1,8 @@
-use bevy::prelude::*;
 use crate::ai_logic::get_best_move;
 use crate::events::PlayerMoveEvent;
 use crate::resources::{AIDelay, BoardState, CurrentAIDifficulty};
 use crate::types::{Difficulty, Player};
+use bevy::prelude::*;
 
 pub fn ai_make_move(
     time: Res<Time>,

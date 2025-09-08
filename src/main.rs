@@ -7,6 +7,9 @@ mod events;
 mod resources;
 mod types;
 
+#[cfg(test)]
+mod test;
+
 use events::{GameOverEvent, PlayerMoveEvent};
 use resources::{AIDelay, BoardState, CurrentAIDifficulty, CurrentGameMode, GameStats};
 use types::{Difficulty, GameMode, Player};
@@ -76,7 +79,8 @@ fn main() {
                 // Core game logic - these should run in order
                 apply_player_move,
                 check_game_state,
-            ).chain(),
+            )
+                .chain(),
         )
         .add_systems(
             Update,
