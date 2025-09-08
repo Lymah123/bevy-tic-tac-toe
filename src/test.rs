@@ -93,8 +93,7 @@ mod tests {
         // Human has two X's in a row, AI should block
         board[0][0] = CellState::Occupied(Player::X);
         board[0][1] = CellState::Occupied(Player::X);
-
-        // Change this line: get_ai_move -> get_best_move
+        
         let ai_move = get_best_move(&board, Player::O);
         assert_eq!(ai_move, Some((0, 2)));
     }
@@ -102,11 +101,9 @@ mod tests {
     #[test]
     fn test_ai_takes_winning_move() {
         let mut board = [[CellState::Empty; 3]; 3];
-        // AI has two O's in a row, should take the win
         board[1][0] = CellState::Occupied(Player::O);
         board[1][1] = CellState::Occupied(Player::O);
 
-        // Change this line: get_ai_move -> get_best_move
         let ai_move = get_best_move(&board, Player::O);
         assert_eq!(ai_move, Some((1, 2)));
     }
