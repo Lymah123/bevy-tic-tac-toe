@@ -1,10 +1,20 @@
 [package]
 name = "bevy-tic-tac-toe"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 rand = "0.8"
-bevy = "0.13"
 
+# Use stable Bevy 0.12 for reliable builds
+bevy = { version = "0.12", default-features = false, features = [
+    "bevy_winit",
+    "bevy_render",
+    "bevy_core_pipeline",
+    "bevy_sprite",
+    "bevy_text",
+    "bevy_ui",
+    "bevy_asset",
+    "png",
+] }

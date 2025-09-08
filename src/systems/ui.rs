@@ -2,12 +2,11 @@ use bevy::prelude::*;
 
 use crate::components::{CellMark, GameOverMessage, RestartButton};
 use crate::config::{
-    BACKGROUND_COLOR, BUTTON_HEIGHT, BUTTON_WIDTH, FONT_SIZE_BUTTON, FONT_SIZE_TITLE, LINE_COLOR,
-    O_COLOR, X_COLOR,
+    BUTTON_HEIGHT, BUTTON_WIDTH, FONT_SIZE_BUTTON, FONT_SIZE_TITLE, LINE_COLOR, O_COLOR, X_COLOR,
 };
 use crate::events::GameOverEvent;
 use crate::resources::{BoardState, GameStats};
-use crate::types::{CellState, GameResult, Player};
+use crate::types::{CellState, Player};
 
 pub fn display_game_over_ui(
     mut commands: Commands,
@@ -103,7 +102,7 @@ pub fn display_game_over_ui(
 }
 
 pub fn handle_restart_button(
-    keys: Res<ButtonInput<KeyCode>>,
+    keys: Res<Input<KeyCode>>,
     mut board_state: ResMut<BoardState>,
     mut commands: Commands,
     game_over_messages: Query<Entity, With<GameOverMessage>>,
@@ -115,7 +114,7 @@ pub fn handle_restart_button(
         info!("Key detected: {:?}", key);
     }
 
-    if keys.just_pressed(KeyCode::KeyR) {
+    if keys.just_pressed(KeyCode::R) {
         println!(" R KEY PRESSED IN UI.RS - RESTART DETECTED!");
         info!(" R key pressed - attempting restart...");
 

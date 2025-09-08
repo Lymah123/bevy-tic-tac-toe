@@ -7,7 +7,7 @@ use crate::resources::BoardState;
 use crate::types::CellState;
 
 pub fn handle_mouse_clicks(
-    mouse_button_input: Res<ButtonInput<MouseButton>>,
+    mouse_button_input: Res<Input<MouseButton>>,
     q_windows: Query<&Window, With<PrimaryWindow>>,
     q_camera: Query<(&Camera, &GlobalTransform), With<Camera2d>>,
     q_board_cells: Query<(&BoardPosition, &Transform)>,

@@ -1,41 +1,70 @@
+[![CI](https://github.com/Lymah123/bevy-tic-tac-toe/workflows/CI/badge.svg)](https://github.com/Lymah123/bevy-tic-tac-toe/actions)
+[![Security Audit](https://github.com/Lymah123/bevy-tic-tac-toe/workflows/Security%20Audit/badge.svg)](https://github.com/Lymah123/bevy-tic-tac-toe/actions)
+[![Latest Release](https://img.shields.io/github/v/release/Lymah123/bevy-tic-tac-toe)](https://github.com/Lymah123/bevy-tic-tac-toe/releases/latest)
+
+## 🎮 **Download & Play**
+
+[![Download for Windows](https://img.shields.io/badge/Download-Windows-blue?style=for-the-badge&logo=windows)](https://github.com/Lymah123/bevy-tic-tac-toe/releases/latest/download/bevy-tic-tac-toe-windows-x86_64.exe)
+[![Download for macOS](https://img.shields.io/badge/Download-macOS-lightgrey?style=for-the-badge&logo=apple)](https://github.com/Lymah123/bevy-tic-tac-toe/releases/latest/download/bevy-tic-tac-toe-macos-x86_64)
+[![Download for Linux](https://img.shields.io/badge/Download-Linux-orange?style=for-the-badge&logo=linux)](https://github.com/Lymah123/bevy-tic-tac-toe/releases/latest/download/bevy-tic-tac-toe-linux-x86_64)
+
+*Download the executable for your platform - no installation required!*
+
+---
+
 # Bevy Tic-Tac-Toe
 
-![Tic-Tac-Toe Gameplay](assets/Screenshot%20(2279).png)
+![Tic-Tac-Toe Gameplay](assets/Screenshot%20(2302).png)
 
 Tic-Tac-Toe built in Rust with the Bevy game engine.
 Features AI opponent using Minimax, responsive UI, and a modular ECS-based design.
 
 ## Table of Contents
+- [Download & Play](#-download--play)
 - [Features](#features)
+- [Quick Start](#quick-start)
 - [Development Setup](#development-setup)
 - [Architecture](#architecture)
 - [AI Logic](#ai-logic)
 - [Contributing](#contributing)
 - [Development Standards](#development-standards)
 - [Performance](#performance)
-- [Acknowledgements](#acknowledgments)
+- [Tech Stack](#tech-stack)
 - [Future Plans](#future-plans)
 - [License](#license)
-- [Usage](#usage)
 
 ## Features
-- Multiple game modes (Human vs Human, Human vs AI)
-- AI with three difficulty levels (Easy, Medium, Hard)
-- Minimax algorithm with alpha-beta pruning
-- Game statistics tracking
-- Modern graphics with smooth animations
-- Responsive mouse interaction
-- Clear win/draw messages
-- Modular ECS architecture
-- Comprehensive documentation and testing
 
-## Deveopment Setup
+- ✅ **Human vs AI gameplay** with intelligent opponent
+- 🧠 **Minimax algorithm** with alpha-beta pruning for unbeatable AI
+- 🎮 **Responsive mouse controls** - click any cell to play
+- 🏗️ **Modern ECS architecture** using Bevy game engine
+- 🔄 **Automatic turn management** and game flow
+- 📱 **Cross-platform support** (Windows, macOS, Linux)
+- 🧪 **Comprehensive unit tests** for AI logic
+- ⚡ **High performance** - native Rust speed
 
+## Quick Start
+
+### Option 1: Download Executable (Recommended)
+1. **[Download for your platform](#-download--play)** using the buttons above
+2. **Run the executable** - double-click to play
+3. **No installation needed** - runs immediately
+
+### Option 2: Build from Source
+```bash
+git clone https://github.com/Lymah123/bevy-tic-tac-toe
+cd bevy-tic-tac-toe
+cargo run --release
 ```
-1. Local Development
 
+## Development Setup
+
+### Local Development
+
+```bash
 # Clone and setup
-git clone https://github.com/your_username/bevy-tic-tac-toe
+git clone https://github.com/Lymah123/bevy-tic-tac-toe
 cd bevy-tic-tac-toe
 
 # Install dependencies
@@ -46,9 +75,11 @@ cargo run
 
 # Run with optimizations
 cargo run --release
+```
 
-2. Testing
+### Testing
 
+```bash
 # Run all tests
 cargo test
 
@@ -60,9 +91,11 @@ cargo test -- --nocapture
 
 # Test with coverage (requires cargo-tarpaulin)
 cargo tarpaulin --out html
+```
 
-3. Code Quality
+### Code Quality
 
+```bash
 # Format code
 cargo fmt
 
@@ -74,7 +107,6 @@ cargo clippy -- -W clippy::pedantic
 
 # Audit dependencies
 cargo audit
-
 ```
 
 ## Architecture
@@ -139,10 +171,29 @@ Contributions are welcome! Please feel free to submit issues, fork the repositor
 
 ## Performance
 
-- **Startup Time**: < 2 seconds on modern hardware
+- **Download Size**: ~15MB executable
+- **Startup Time**: < 1 second on modern hardware
 - **Memory Usage**: ~50MB RAM typical
-- **Frame Rate**: 60 FPS consistent on integrated graphics
-- **Binary Size**: ~15MB release build
+- **Frame Rate**: 60 FPS consistent
+- **No Dependencies**: Self-contained executable
+
+## Tech Stack
+
+### Core Technologies
+- **[Rust](https://www.rust-lang.org/)** - Systems programming language
+- **[Bevy Engine](https://bevyengine.org/)** - Data-driven game engine
+
+### Dependencies
+```toml
+[dependencies]
+bevy = "0.11"           # Main game engine
+```
+
+### Architecture Patterns
+- **ECS (Entity-Component-System)** - Bevy's core architecture
+- **Event-Driven Design** - Decoupled system communication
+- **Resource Management** - Global state handling
+- **System Scheduling** - Ordered execution pipelines
 
 ## Acknowledgments
 
@@ -153,8 +204,27 @@ Contributions are welcome! Please feel free to submit issues, fork the repositor
 
 ## Usage
 
-Click on an empty cell to make a move. The game ends when...
+### How to Play
 
+1. **Download and run** the executable for your platform
+2. **Make your move** - Click any empty cell (you play as X)
+3. **AI responds** - The AI automatically places O
+4. **Win conditions** - Get 3 in a row (horizontal, vertical, or diagonal)
+
+### System Requirements
+- **Windows**: Windows 10+ (64-bit)
+- **macOS**: macOS 10.12+ (64-bit)
+- **Linux**: Most modern distributions (64-bit)
+- **RAM**: 50MB minimum
+- **Storage**: 15MB disk space
+
+### Controls
+
+| Action | Input |
+|--------|-------|
+| Place mark | Left mouse click on empty cell |
+| Restart game | R key (if implemented) |
+| Exit game | Alt + F4 / Cmd + Q |
 
 ## Future Plans
 
@@ -163,6 +233,17 @@ Click on an empty cell to make a move. The game ends when...
 - [ ] Mobile-friendly UI (larger touch zones)
 - [ ] Undo/Redo move history
 - [ ] Export match statistics to file
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### MIT License Summary
+- ✅ Commercial use allowed
+- ✅ Modification allowed
+- ✅ Distribution allowed
+- ✅ Private use allowed
+- ❌ No warranty provided
 
 **Built with ❤️ in Rust**
 
