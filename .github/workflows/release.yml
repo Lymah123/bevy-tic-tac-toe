@@ -43,8 +43,8 @@ jobs:
             libudev-dev \
             libxkbcommon-x11-0 \
             xvfb \
-            libegl1-mesa \
-            libgl1-mesa-dri \
+            libegl1-mesa-dev \
+            libgl1-mesa-dev \
             libxcursor1 \
             libxi6 \
             libxrandr2
