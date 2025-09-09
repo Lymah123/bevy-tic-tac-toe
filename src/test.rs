@@ -58,9 +58,21 @@ mod tests {
     #[test]
     fn test_full_board() {
         let board = [
-            [CellState::Occupied(Player::X), CellState::Occupied(Player::O), CellState::Occupied(Player::X)],
-            [CellState::Occupied(Player::O), CellState::Occupied(Player::X), CellState::Occupied(Player::O)],
-            [CellState::Occupied(Player::O), CellState::Occupied(Player::X), CellState::Occupied(Player::O)]
+            [
+                CellState::Occupied(Player::X),
+                CellState::Occupied(Player::O),
+                CellState::Occupied(Player::X),
+            ],
+            [
+                CellState::Occupied(Player::O),
+                CellState::Occupied(Player::X),
+                CellState::Occupied(Player::O),
+            ],
+            [
+                CellState::Occupied(Player::O),
+                CellState::Occupied(Player::X),
+                CellState::Occupied(Player::O),
+            ],
         ];
         assert!(is_board_full(&board));
     }
@@ -93,7 +105,7 @@ mod tests {
         // Human has two X's in a row, AI should block
         board[0][0] = CellState::Occupied(Player::X);
         board[0][1] = CellState::Occupied(Player::X);
-        
+
         let ai_move = get_best_move(&board, Player::O);
         assert_eq!(ai_move, Some((0, 2)));
     }

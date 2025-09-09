@@ -36,12 +36,33 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libasound2-dev libudev-dev
+          sudo apt-get install -y \
+            pkg-config \
+            libx11-dev \
+            libasound2-dev \
+            libudev-dev \
+            libxkbcommon-x11-0 \
+            xvfb \
+            libegl1-mesa \
+            libgl1-mesa-dri \
+            libxcursor1 \
+            libxi6 \
+            libxrandr2
 
-      - name: Run tests
+      - name: Run tests (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a cargo test
+
+      - name: Run tests (Non-Linux)
+        if: runner.os != 'Linux'
         run: cargo test
 
-      - name: Build
+      - name: Build (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a cargo build --release --target ${{ matrix.target }}
+
+      - name: Build (Non-Linux)
+        if: runner.os != 'Linux'
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Package binary

@@ -3,6 +3,11 @@ name = "bevy-tic-tac-toe"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+default = ["desktop"]
+desktop = ["bevy/x11", "bevy/wayland"]
+web = ["bevy/webgl2"]
+
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 rand = "0.8"
@@ -17,4 +22,5 @@ bevy = { version = "0.12", default-features = false, features = [
     "bevy_ui",
     "bevy_asset",
     "png",
+    "bevy_gilrs",    # Gamepad support
 ] }
