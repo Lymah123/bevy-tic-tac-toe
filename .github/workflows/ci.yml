@@ -42,9 +42,6 @@ jobs:
     - name: Run tests
       run: xvfb-run -a cargo test --verbose
 
-    - name: Run doctests
-      run: xvfb-run -a cargo test --doc
-
   fmt:
     name: Rustfmt
     runs-on: ubuntu-latest
