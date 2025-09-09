@@ -39,13 +39,24 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libasound2-dev libudev-dev
+          sudo apt-get install -y \
+            pkg-config \
+            libx11-dev \
+            libasound2-dev \
+            libudev-dev \
+            libxkbcommon-x11-0 \
+            xvfb \
+            libegl1-mesa \
+            libgl1-mesa-dri \
+            libxcursor1 \
+            libxi6 \
+            libxrandr2
 
       - name: Run tests
-        run: cargo test
+        run: xvfb-run -a cargo test
 
       - name: Build for Linux
-        run: cargo build --release
+        run: xvfb-run -a cargo build --release
 
       - name: Build WASM for web
         run: |

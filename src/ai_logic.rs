@@ -1,4 +1,4 @@
-use crate::types::{CellState, Player, Board};
+use crate::types::{Board, CellState, Player};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BoardMove {
