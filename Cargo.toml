@@ -5,15 +5,16 @@ edition = "2021"
 
 [features]
 default = ["desktop"]
-desktop = ["bevy/x11", "bevy/wayland"]
-web = ["bevy/webgl2"]
+desktop = []
+web = []
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 rand = "0.8"
+log = "0.4" 
 
-# Use stable Bevy 0.12 for reliable builds
-bevy = { version = "0.12", default-features = false, features = [
+# Use Bevy 0.10 - has better WASM compatibility and older getrandom
+bevy = { version = "0.10", default-features = false, features = [
     "bevy_winit",
     "bevy_render",
     "bevy_core_pipeline",
@@ -22,5 +23,14 @@ bevy = { version = "0.12", default-features = false, features = [
     "bevy_ui",
     "bevy_asset",
     "png",
-    "bevy_gilrs",    # Gamepad support
 ] }
+
+# Fix uuid for WASM - this overrides the version Bevy uses
+uuid = { version = "1.0", features = ["v4", "js"] }
+
+# WASM-specific dependencies
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+console_error_panic_hook = "0.1"
+console_log = "1.0"
+getrandom = { version = "0.2", features = ["js"] }

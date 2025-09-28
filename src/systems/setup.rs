@@ -5,7 +5,9 @@ use crate::config::{BACKGROUND_COLOR, BOARD_SIZE, CELL_SIZE, LINE_COLOR, LINE_TH
 
 pub fn setup_game(mut commands: Commands, mut clear_color: ResMut<ClearColor>) {
     // Camera
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn((
+        Camera2dBundle::default(),
+    ));
     clear_color.0 = BACKGROUND_COLOR;
 
     // Grid lines (NO BoardPosition components!)

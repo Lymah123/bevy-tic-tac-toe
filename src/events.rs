@@ -1,17 +1,12 @@
-use crate::types::Player;
 use bevy::prelude::*;
+use crate::types::Player;
 
-// Event fired when a player makes a move
-#[derive(Event, Debug)]
+#[derive(Debug, Clone)]
 pub struct PlayerMoveEvent {
-    pub row: usize,
-    pub col: usize,
-    pub player: Player,
+  pub position: (usize, usize),
 }
 
-// Event fired when the game ends
-#[derive(Event, Debug)]
-pub enum GameOverEvent {
-    Win(Player),
-    Draw,
+#[derive(Debug, Clone)]
+pub struct GameOverEvent {
+  pub winner: Option<Player>,
 }
