@@ -1,0 +1,12 @@
+services:
+  bevy-tic-tac-toe:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    environment:
+      - RUST_LOG=info
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4

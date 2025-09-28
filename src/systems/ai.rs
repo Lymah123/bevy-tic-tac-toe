@@ -41,9 +41,7 @@ pub fn ai_make_move(
             println!("🎯 AI chooses: ({}, {})", best_move.0, best_move.1);
 
             player_move_events.send(PlayerMoveEvent {
-                row: best_move.0,
-                col: best_move.1,
-                player: Player::O,
+                position: (best_move.0, best_move.1),
             });
         } else {
             println!("❌ AI couldn't find a move! Looking for any empty cell...");
@@ -51,13 +49,11 @@ pub fn ai_make_move(
             // Fallback to any empty cell
             for row in 0..3 {
                 for col in 0..3 {
-                    if let crate::types::CellState::Empty = board_state.board[row][col] {
+                    if board_state.board[row][col].is_none() {
                         println!("🔄 AI fallback move: ({}, {})", row, col);
 
                         player_move_events.send(PlayerMoveEvent {
-                            row,
-                            col,
-                            player: Player::O,
+                            position: (row, col),
                         });
                         return;
                     }

@@ -1,10 +1,10 @@
-use crate::types::{CellState, Difficulty, GameMode, Player};
+use crate::types::{Board, Difficulty, GameMode, Player};
 use bevy::prelude::*;
 use bevy::time::TimerMode;
 
 #[derive(Resource)]
 pub struct BoardState {
-    pub board: [[CellState; 3]; 3],
+    pub board: Board,
     pub current_player: Player,
     pub game_over: bool,
     pub winner: Option<Player>,
@@ -33,7 +33,7 @@ impl Default for AIDelay {
 impl Default for BoardState {
     fn default() -> Self {
         Self {
-            board: [[CellState::Empty; 3]; 3],
+            board: [[None; 3]; 3],
             current_player: Player::X,
             game_over: false,
             winner: None,
