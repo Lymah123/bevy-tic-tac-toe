@@ -11,6 +11,7 @@ pub struct BoardState {
 }
 
 #[derive(Resource)]
+#[allow(dead_code)]
 pub struct CurrentGameMode(pub GameMode);
 
 #[derive(Resource)]

@@ -94,6 +94,7 @@ pub enum Difficulty {
 // Represents the current mode of the game (e.g., Human vs Human, Human vs AI, AI vs AI).
 #[derive(Debug, PartialEq, Clone, Copy, Eq, Default)]
 pub enum GameMode {
+    #[allow(dead_code)]
     HumanVsHuman,
     #[default]
     HumanVsAI,

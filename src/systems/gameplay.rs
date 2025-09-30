@@ -21,7 +21,12 @@ pub fn apply_player_move(
         let (row, col) = event.position;
         let player = board_state.current_player;
 
-        info!("🎯 Processing move: {} at ({},{})", player.to_char(), row, col);
+        info!(
+            "🎯 Processing move: {} at ({},{})",
+            player.to_char(),
+            row,
+            col
+        );
 
         // Check if game is over or cell is occupied
         if board_state.game_over {
@@ -60,25 +65,28 @@ pub fn apply_player_move(
             Player::O => O_COLOR,
         };
 
-        info!("Font size: {:.2}, CELL_SIZE: {:.2}, MARKER_SIZE_RATIO: {:.2}", mark_font_size, CELL_SIZE, MARKER_SIZE_RATIO);
+        info!(
+            "Font size: {:.2}, CELL_SIZE: {:.2}, MARKER_SIZE_RATIO: {:.2}",
+            mark_font_size, CELL_SIZE, MARKER_SIZE_RATIO
+        );
         info!("Color for {}: {:?}", player.to_char(), mark_color);
 
         // Spawn the marker entity
         let marker_entity = commands
             .spawn((
-              SpriteBundle {
-                sprite: Sprite {
-                    color: match player {
-                      Player::X => Color::rgb(1.0, 0.0, 0.0),
-                      Player::O => Color::rgb(0.0, 0.1, 0.0),
+                SpriteBundle {
+                    sprite: Sprite {
+                        color: match player {
+                            Player::X => Color::rgb(1.0, 0.0, 0.0),
+                            Player::O => Color::rgb(0.0, 0.1, 0.0),
+                        },
+                        custom_size: Some(Vec2::new(80.0, 80.0)),
+                        ..default()
                     },
-                    custom_size: Some(Vec2::new(80.0, 80.0)),
+                    transform: Transform::from_xyz(0.0, 0.0, 100.0),
                     ..default()
                 },
-                transform: Transform::from_xyz(0.0, 0.0, 100.0),
-                ..default()
-              },
-              CellMark(player),
+                CellMark(player),
             ))
             .id();
         // Make the marker a child of the cell
@@ -89,7 +97,10 @@ pub fn apply_player_move(
 
         // Switch turns ONLY after a successful move
         board_state.current_player = board_state.current_player.opposite();
-        info!("🔄 Turn switched to: {}", board_state.current_player.to_char());
+        info!(
+            "🔄 Turn switched to: {}",
+            board_state.current_player.to_char()
+        );
 
         println!("Current board state:");
         for row in 0..3 {
@@ -121,7 +132,9 @@ pub fn check_game_state(
             info!("🏆 {} WINS!", winner.to_char());
             board_state.game_over = true;
             board_state.winner = Some(winner);
-            game_over_events.send(GameOverEvent { winner: Some(winner) });
+            game_over_events.send(GameOverEvent {
+                winner: Some(winner),
+            });
         }
         None => {
             // Check if board is full (draw)

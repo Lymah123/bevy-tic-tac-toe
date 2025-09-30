@@ -44,13 +44,6 @@ pub const HARD_AI_DEPTH: i32 = 9; // Full depth
 pub const FONT_SIZE_TITLE: f32 = 32.0;
 #[allow(dead_code)]
 pub const FONT_SIZE_STATUS: f32 = 24.0;
-pub const FONT_SIZE_BUTTON: f32 = 18.0;
-
-// Button dimensions
-pub const BUTTON_WIDTH: f32 = 120.0;
-pub const BUTTON_HEIGHT: f32 = 40.0;
-#[allow(dead_code)]
-pub const BUTTON_MARGIN: f32 = 10.0;
 
 // Hover effects
 #[allow(dead_code)]

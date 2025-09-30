@@ -24,7 +24,10 @@ pub fn handle_mouse_clicks(
             return;
         }
 
-        info!("✅ Game not over, current player: {:?}", board_state.current_player);
+        info!(
+            "✅ Game not over, current player: {:?}",
+            board_state.current_player
+        );
 
         // Get window
         let Ok(window) = q_windows.get_single() else {
@@ -49,7 +52,8 @@ pub fn handle_mouse_clicks(
         info!("📷 Camera found at: {:?}", camera_transform.translation());
 
         // Convert cursor to world coordinates
-        let Some(world_position) = camera.viewport_to_world_2d(camera_transform, cursor_position) else {
+        let Some(world_position) = camera.viewport_to_world_2d(camera_transform, cursor_position)
+        else {
             error!("❌ Failed to convert cursor to world coordinates!");
             return;
         };
@@ -66,24 +70,32 @@ pub fn handle_mouse_clicks(
             let distance = world_position.distance(cell_center);
             let half_cell = CELL_SIZE / 2.0;
 
-            info!("🏠 Cell ({},{}) at {:?}, distance: {:.2}, half_cell: {:.2}",
-                  board_pos.row, board_pos.col, cell_center, distance, half_cell);
+            info!(
+                "🏠 Cell ({},{}) at {:?}, distance: {:.2}, half_cell: {:.2}",
+                board_pos.row, board_pos.col, cell_center, distance, half_cell
+            );
 
             // Check if click is within cell bounds
-            if (world_position.x >= cell_center.x - half_cell &&
-                world_position.x <= cell_center.x + half_cell &&
-                world_position.y >= cell_center.y - half_cell &&
-                world_position.y <= cell_center.y + half_cell) {
-
+            if world_position.x >= cell_center.x - half_cell
+                && world_position.x <= cell_center.x + half_cell
+                && world_position.y >= cell_center.y - half_cell
+                && world_position.y <= cell_center.y + half_cell
+            {
                 info!("🎯 CLICKED ON CELL ({},{})!", board_pos.row, board_pos.col);
 
                 // Check if cell is already occupied
                 if board_state.board[board_pos.row][board_pos.col].is_some() {
-                    info!("🚫 Cell ({},{}) already occupied", board_pos.row, board_pos.col);
+                    info!(
+                        "🚫 Cell ({},{}) already occupied",
+                        board_pos.row, board_pos.col
+                    );
                     return;
                 }
 
-                info!("✅ Sending PlayerMoveEvent for ({},{})", board_pos.row, board_pos.col);
+                info!(
+                    "✅ Sending PlayerMoveEvent for ({},{})",
+                    board_pos.row, board_pos.col
+                );
                 player_move_events.send(PlayerMoveEvent {
                     position: (board_pos.row, board_pos.col),
                 });

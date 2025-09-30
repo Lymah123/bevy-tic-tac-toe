@@ -81,8 +81,37 @@
         .controls {
             margin-top: 20px;
             text-align: center;
-            opacity: 0.7;
+            opacity: 0.8;
+            max-width: 600px;
         }
+
+        .player-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .player-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .player-symbol {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .player-x { background-color: #ff4444; }
+        .player-o { background-color: #44ff44; }
 
         .tech-badge {
             display: inline-block;
@@ -93,10 +122,18 @@
             font-size: 0.9em;
         }
 
+        .game-instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
         @media (max-width: 600px) {
             body { padding: 10px; }
             .header h1 { font-size: 2em; }
             canvas { max-width: 100%; height: auto; }
+            .player-info { gap: 15px; }
         }
     </style>
 <link rel="modulepreload" href="/bevy-tic-tac-toe-bd93a13235d80927.js" crossorigin="anonymous" integrity="sha384-59LVRGbFn0qiljSbFQMIxwZxGuTbmcstusuiTWgO5+OPtPtNUrRjrqRPTMJM51V3"><link rel="preload" href="/bevy-tic-tac-toe-bd93a13235d80927_bg.wasm" crossorigin="anonymous" integrity="sha384-v+r+eN4pTQsCCAZKeP0/5aoP3kreZfGx51HGfoJpBs3+H+qPCoNGtqzbyAMRCLEE" as="fetch" type="application/wasm"></head>
@@ -122,8 +159,23 @@
     </div>
 
     <div class="controls">
-        <p>🖱️ Click any cell to make your move • You are <strong>X</strong>, AI is <strong>O</strong></p>
-        <p>💡 The AI uses Minimax algorithm with alpha-beta pruning - good luck!</p>
+        <div class="player-info">
+            <div class="player-badge">
+                <div class="player-symbol player-x"></div>
+                <span>You (Human) - Red Square</span>
+            </div>
+            <div class="player-badge">
+                <div class="player-symbol player-o"></div>
+                <span>AI Opponent - Green Square</span>
+            </div>
+        </div>
+
+        <div class="game-instructions">
+            <p><strong>🖱️ How to Play:</strong></p>
+            <p>• Click any empty cell to make your move</p>
+            <p>• Press <strong>R</strong> key to restart the game</p>
+            <p>• The AI uses Minimax algorithm with alpha-beta pruning - good luck! 🧠</p>
+        </div>
     </div>
 
     <script>
